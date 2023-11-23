@@ -10,6 +10,7 @@ import h5py
 
 import agent_class as agent
 from gym_env import FightingZombiesDisc
+from malmo_agent import plot_table
 
 # agent_class defines
 # - class "neural_network"
@@ -119,6 +120,8 @@ def run_and_save_simulations(env, # environment
             episode_return += step_reward
             #
             if done:
+                if (i + 1) % 100 == 0:
+                    plot_table(env.agent.rewards, "rewards")
                 #
                 durations.append(n+1)
                 returns.append(episode_return)
