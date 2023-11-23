@@ -8,7 +8,8 @@ import torch
 from torch import nn
 import copy
 import h5py
-device = torch.device("cpu") 
+from malmo_agent import *
+device = torch.device("cpu")
 #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #device = 'mps'
 import warnings
@@ -586,6 +587,8 @@ class agent_base():
                     training_complete, min_ret, mean_ret = \
                             self.evaluate_stopping_criterion(\
                                 list_of_returns=episode_returns)
+                    if (n_episode + 1) % 100 == 0:
+                        plot_table(environment.agent.rewards, "rewards")
                     if verbose:
                             # print training stats
                             if n_episode % 100 == 0 and n_episode > 0:

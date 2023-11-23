@@ -101,7 +101,7 @@ class Agent:
         if world_state.number_of_rewards_since_last_state > 0:
             for rew in world_state.rewards:
                 self.tick_reward += rew.getValue()
-                print("Reward: +", self.tick_reward)
+                # print("Reward: +", self.tick_reward)
 
         # If Agent is steel alive we observe the changes on the environment and calculate our own rewards
         if world_state.number_of_observations_since_last_state > 0:
@@ -125,7 +125,7 @@ class Agent:
             cur_zombies_alive = list(d.get('name') == 'Zombie' for d in ob["entities"]).count(True)
             if cur_zombies_alive - self.zombies_alive != 0:
                 self.tick_reward += 100
-                print("Reward: +100")
+                # print("Reward: +100")
             self.zombies_alive = cur_zombies_alive
             self.zombie_los_in_range = 0
             self.zombie_los = 0
@@ -152,7 +152,7 @@ class Agent:
             self.unresponsive_count -= 1
         if self.unresponsive_count <= 0 and not self.all_zombies_died:  # Agent died but we are here one tick before episode ends, so we punish him
             self.tick_reward -= 100
-            print("Reward: -100")
+            # print("Reward: -100")
         self.state = [self.zombie_los_in_range, self.zombie_los, self.current_pos[0]
             , self.current_pos[1], self.current_life, self.yaw, self.zombie_yaw[0], self.zombie_yaw[1], self.zombie_yaw[2]
             , self.zombies_pos[0][0], self.zombies_pos[0][1], self.zombies_pos[1][0], self.zombies_pos[1][1],
@@ -171,20 +171,20 @@ class Agent:
         self.rewards.append(self.episode_reward)
         print()
         self.malmo_agent.sendCommand("quit")
-        if self.all_zombies_died:
-            print("All Zombies Died")
-        elif self.unresponsive_count <= 0:
-            print("Agent Died")
-        print("Waiting for mission to end ", end=' ')
+        # if self.all_zombies_died:
+        #     print("All Zombies Died")
+        # elif self.unresponsive_count <= 0:
+        #     print("Agent Died")
+        # print("Waiting for mission to end ", end=' ')
         hasEnded = False
         while not hasEnded:
             hasEnded = True  # assume all good
-            print(".", end="")
+            # print(".", end="")
             time.sleep(0.1)
             world_state = self.malmo_agent.getWorldState()
             if world_state.is_mission_running:
                 hasEnded = False  # all not good
-        self.print_finish_data()
+        # self.print_finish_data()
         self.episode_reward = 0
         self.zombies_alive = NUM_MOBS
         self.reset_state()
@@ -224,7 +224,7 @@ class Agent:
                     if len(ob["entities"]) == NUM_MOBS + NUM_AGENTS:
                         break
             if unresponsive_count <= 0:
-                print("Quit!")
+                # print("Quit!")
                 self.malmo_agent.sendCommand("quit")
                 time.sleep(3)
                 self.start_episode()
@@ -234,7 +234,7 @@ class Agent:
     def __safe_start_mission(self, mission, mission_record, role, expId):
         used_attempts = 0
         max_attempts = 5
-        print("Calling startMission for role", role)
+        # print("Calling startMission for role", role)
         while True:
             try:
                 # Attempt start:
@@ -264,10 +264,10 @@ class Agent:
             if used_attempts == max_attempts:
                 print("All chances used up - bailing now.")
                 exit(1)
-        print("startMission called okay.")
+        # print("startMission called okay.")
 
     def __safe_wait_for_start(self):
-        print("Waiting for the mission to start", end=' ')
+        # print("Waiting for the mission to start", end=' ')
         start_flag = False
         start_time = time.time()
         time_out = 120  # Allow a two minute timeout.
@@ -282,12 +282,13 @@ class Agent:
                 print("Bailing now.")
                 exit(1)
             time.sleep(0.1)
-            print(".", end=' ')
+            #
+            # print(".", end=' ')
         if time.time() - start_time >= time_out:
             print("Timed out while waiting for mission to start - bailing.")
             exit(1)
         print()
-        print("Mission has started.")
+        # print("Mission has started.")
 
 
     def __spawn_zombies(self):
